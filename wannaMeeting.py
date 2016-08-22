@@ -20,6 +20,8 @@ def main():
     filepath = "/home/igormacedo/Documents/Python/wannaMeeting/times"
     loadFile(filepath)
     printSomeonesSchedule("Igor Macedo")
+    freetime = reunionTime(["Igor Macedo"])
+    showMeetingResult(freetime)
 
 ##Loads the file with the schedule for everyone and creates a dictionary the contains
 ##eveyone's schedule
@@ -34,7 +36,7 @@ def loadFile(filepath):
 
     #print peopletimes
 
-def printSomeonesSchedule(name):
+def printSomeonesSchedule(name): #gets string with name to print the schedule dictionary
     schedule = peopletimes[name]
     for day in range(0,7):
         print weekday[day] + "\t",
@@ -47,7 +49,24 @@ def printSomeonesSchedule(name):
         print "| " + schedule[times[8*day+6]] + " |",
         print "| " + schedule[times[8*day+7]] + " |"
 
+def reunionTime(names): # list of names to compare times
+    freetime = {}
+    for time in times:
+        freetime[time] = []
 
+    for name in names:
+        schedule = peopletimes[name]
+        for time in times:
+            if schedule[time] == "VAGO":
+                freetime[time].append(name)
+
+    #print freetime
+    return freetime
+
+def showMeetingResult(freetime): #dictionary with names with free time at each time
+    for time in times:
+        print time + ": ",
+        print freetime[time]
 
 
 
