@@ -17,14 +17,41 @@ def main():
 
     #filepath = raw_input("Nome do arquivo: ")
 
-    filepath = "/home/igormacedo/Documents/Python/wannaMeeting/times"
-    loadFile(filepath)
-    printSomeonesSchedule("Igor Macedo")
-    freetime = reunionTime(["Igor Macedo"])
-    showMeetingResult(freetime)
+    filepath1 = "/home/igormacedo/Documentos/Python/wannameeting/times"
+    filepath2 = "/home/igormacedo/Documents/Python/wannaMeeting/times"
+    loadFile(filepath1)
+
+    while choice
+        print "Menu"
+        print "1 - Lista de Nomes"
+        print "2 - Imprimir Horario"
+        print "3 - Comparar Horarios Livres"
+        print "4 - Comparar com meu horario"
+        print "0 - Exit"
+
+        choice = int(raw_input("Escolha um numero: "))
+        if(choice == 1):
+            print sorted(peopletimes.keys())
+        elif(choice == 2):
+            printTimes()
+        elif(choice == 3):
+            pass
+        elif(choice == 4):
+            pass
+        else:
+            print "No valid option selected"
+
+
+    #printSomeonesSchedule("Igor Macedo")
+    #freetime = reunionTime(["Igor Macedo"])
+    #showMeetingResult(freetime)
 
 ##Loads the file with the schedule for everyone and creates a dictionary the contains
 ##eveyone's schedule
+def printTimes():
+    name = raw_input("Nomes: ")
+    printSomeonesSchedule(nome)
+
 def loadFile(filepath):
     f = open(filepath, 'r')
     for line in f:
