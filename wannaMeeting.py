@@ -19,27 +19,34 @@ def main():
 
     filepath1 = "/home/igormacedo/Documentos/Python/wannameeting/times"
     filepath2 = "/home/igormacedo/Documents/Python/wannaMeeting/times"
-    loadFile(filepath1)
+    loadFile(filepath2)
+    choice = 1
 
-    while choice
+    while choice != 0:
         print "Menu"
         print "1 - Lista de Nomes"
         print "2 - Imprimir Horario"
         print "3 - Comparar Horarios Livres"
         print "4 - Comparar com meu horario"
-        print "0 - Exit"
+        print "0 - Exit\n"
 
         choice = int(raw_input("Escolha um numero: "))
-        if(choice == 1):
+        if (choice == 1):
             print sorted(peopletimes.keys())
-        elif(choice == 2):
+            print "\n"
+        elif (choice == 2):
             printTimes()
-        elif(choice == 3):
-            pass
-        elif(choice == 4):
-            pass
+            print "\n"
+        elif (choice == 3):
+            printReunionResults()
+            print "\n"
+        elif (choice == 4):
+            compararUmaPessoa()
+            print "\n"
+        elif (choice == 0):
+            print "Preparing to exit\n"
         else:
-            print "No valid option selected"
+            print "No valid option selected\n"
 
 
     #printSomeonesSchedule("Igor Macedo")
@@ -48,9 +55,6 @@ def main():
 
 ##Loads the file with the schedule for everyone and creates a dictionary the contains
 ##eveyone's schedule
-def printTimes():
-    name = raw_input("Nomes: ")
-    printSomeonesSchedule(nome)
 
 def loadFile(filepath):
     f = open(filepath, 'r')
@@ -62,6 +66,13 @@ def loadFile(filepath):
             peopletimes[newentry[0]][times[i]] = schedule[i]
 
     #print peopletimes
+
+##========================= Print schedule ============================================
+
+def printTimes():
+    name = raw_input("Nomes: ")
+    printSomeonesSchedule(name)
+    print "\n\n"
 
 def printSomeonesSchedule(name): #gets string with name to print the schedule dictionary
     schedule = peopletimes[name]
@@ -76,18 +87,40 @@ def printSomeonesSchedule(name): #gets string with name to print the schedule di
         print "| " + schedule[times[8*day+6]] + " |",
         print "| " + schedule[times[8*day+7]] + " |"
 
+#========================= Reunion Time =============================================
+
+def printReunionResults():
+    print "Enter sem nome para sair"
+    print "Digite os nomes que precisam estar na reuniao (enter para cada nome): "
+    names = []
+    while True:
+        name = raw_input()
+        if name != "":
+            names.append(name)
+        else:
+            break
+
+    if len(names) != 0:
+        freetime = reunionTime(names)
+        print "\n"
+        showMeetingResult(freetime)
+    else:
+        print "Nenhum nome de input."
+
 def reunionTime(names): # list of names to compare times
     freetime = {}
     for time in times:
         freetime[time] = []
 
     for name in names:
-        schedule = peopletimes[name]
-        for time in times:
-            if schedule[time] == "VAGO":
-                freetime[time].append(name)
+        if name in peopletimes.keys():
+            schedule = peopletimes[name]
+            for time in times:
+                if schedule[time] == "VAGO":
+                    freetime[time].append(name)
+        else:
+            print "O nome \"" + name +"\" nao esta na lista."
 
-    #print freetime
     return freetime
 
 def showMeetingResult(freetime): #dictionary with names with free time at each time
@@ -95,7 +128,41 @@ def showMeetingResult(freetime): #dictionary with names with free time at each t
         print time + ": ",
         print freetime[time]
 
+##===========================  Comparar com meu horario ==========================================
 
+def compararUmaPessoa():
+    meunome = ""
+    while meunome not in peopletimes.keys():
+        meunome = raw_input("Quem eh voce: ")
+
+    myfreelist = getMyfreetimelist(meunome)
+    whocanmeet = getDictofWhoCanMeetwithU(myfreelist, meunome)
+    showMeetingResult(whocanmeet)
+
+def getMyfreetimelist(nome):
+    myfreelist = []
+    schedule = peopletimes[nome]
+    for time in schedule.keys():
+        if schedule[time] == "VAGO":
+            myfreelist.append(time)
+
+    return myfreelist
+
+def getDictofWhoCanMeetwithU(myfreelist, meunome):
+    whocanmeet = {}
+    for time in times:
+        whocanmeet[time] = []
+
+    for name in peopletimes.keys():
+        if name == meunome:
+            continue
+
+        schedule = peopletimes[name]
+        for time in myfreelist:
+            if schedule[time] == "VAGO":
+                whocanmeet[time].append(name)
+
+    return whocanmeet
 
 if __name__ == '__main__':
     sys.exit(main())
